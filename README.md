@@ -23,7 +23,7 @@ ___
    
    同上。 
 
-3. 在容器里apt安装软件时出现`Download is performed unsandboxed as root as file '/var/cache/apt/archives/partial/less_487-0.1build1_amd64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied):
+3. 在容器里apt安装软件时出现`Download is performed unsandboxed as root as file '/var/cache/apt/archives/partial/less_487-0.1build1_amd64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)`:
     ```
     chmod -R 777 /var/cache
     ```
