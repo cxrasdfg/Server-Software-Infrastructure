@@ -35,4 +35,4 @@ ___
 5. 进入桌面发现浏览器中文乱码:
    ```
    apt install fonts* -y
-   ```# Server-Software-Infrastructure
+   ```
