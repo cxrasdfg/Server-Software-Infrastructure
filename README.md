@@ -37,7 +37,7 @@ ___
    apt install fonts* -y
    ```
 6. 在31上的服务器断电重启后出现掉显卡驱动的问题(宿主机):
-   1. 先执行[`add_workspace.sh`](./chapters/scripts/add_workspace.sh)脚本挂载硬盘到用户目录:
+   1. 先执行[`add_workspace.sh`](./chapters/scripts/main/add_workspace.sh)脚本挂载硬盘到用户目录:
       ```
       sudo ./add_workspace.sh
       ```
@@ -54,3 +54,7 @@ ___
       sudo ~/workspace/D/download/cuda/cuda_9/NVIDIA-Linux-x86_64-xxx.xx.run 
       ```
       按提示操作即可:
+   4.  最后执行[deviceQuery](./chapters/exe/main/deviceQuery):
+       ```
+       sudo ./deviceQuery
+       ```
