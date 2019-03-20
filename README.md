@@ -32,7 +32,25 @@ ___
    rm -r /tmp/.X1*
    ```
 
-5. 进入桌面发现浏览器中文乱码:
+5. 用VNCViewer进入容器内桌面发现浏览器中文乱码:
    ```
    apt install fonts* -y
    ```
+6. 在31上的服务器断电重启后出现掉显卡驱动的问题(宿主机):
+   1. 先执行[`add_workspace.sh`](./chapters/scripts/add_workspace.sh)脚本挂载硬盘到用户目录:
+      ```
+      sudo ./add_workspace.sh
+      ```
+      如果出现没有执行权限，添加权限即可：
+      ```
+      chmod +x add_workspace.sh
+      ```
+   2. 卸载显卡驱动：
+      ```
+      sudo ~/workspace/D/download/cuda/cuda_9/NVIDIA-Linux-x86_64-xxx.xx.run --uninstall
+      ```
+   3. 安装显卡驱动：
+      ```
+      sudo ~/workspace/D/download/cuda/cuda_9/NVIDIA-Linux-x86_64-xxx.xx.run 
+      ```
+      按提示操作即可:
