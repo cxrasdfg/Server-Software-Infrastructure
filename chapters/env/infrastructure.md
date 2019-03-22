@@ -85,14 +85,16 @@ n卡官方的linux驱动地址[下载](https://www.nvidia.com/object/unix.html)�
   ```
   清除原有内容，输入以下内容:
   ```
-  deb http://mirrors.163.com/ubuntu/ disco-updates main restricted universe multiverse
-  deb http://mirrors.163.com/ubuntu/ disco-proposed main restricted universe multiverse
-  deb http://mirrors.163.com/ubuntu/ disco-backports main restricted universe multiverse
-  deb-src http://mirrors.163.com/ubuntu/ disco main restricted universe multiverse
-  deb-src http://mirrors.163.com/ubuntu/ disco-security main restricted universe multiverse
-  deb-src http://mirrors.163.com/ubuntu/ disco-updates main restricted universe multiverse
-  deb-src http://mirrors.163.com/ubuntu/ disco-proposed main restricted universe multiverse
-  deb-src http://mirrors.163.com/ubuntu/ disco-backports main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ disco main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ disco-security main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ disco-updates main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ disco-proposed main restricted universe multiverse
+  deb http://mirrors.aliyun.com/ubuntu/ disco-backports main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ disco main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ disco-security main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ disco-updates main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ disco-proposed main restricted universe multiverse
+  deb-src http://mirrors.aliyun.com/ubuntu/ disco-backports main restricted universe multiverse
   ```
   这里用的是ubuntu19.04的源，其他版本的源可以自己从网上找。vim在命令模式按`i`可进行插入编辑。复制完后按`Esc`键切换为命令模式后输入`:wq!`保存并退出。
 
