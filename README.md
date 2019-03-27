@@ -58,3 +58,7 @@ ___
        ```
        sudo ./deviceQuery
        ```
+7. 执行sudo出现`usr-bin-sudo-must-be-owned-by-uid-0-and-have-the-setuid-bit-set`:
+   ```
+   chown root:root /usr/bin/sudo && chmod 4755 /usr/bin/sudo
+   ```
