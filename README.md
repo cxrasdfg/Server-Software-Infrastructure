@@ -62,3 +62,9 @@ ___
    ```
    chown root:root /usr/bin/sudo && chmod 4755 /usr/bin/sudo
    ```
+
+8. 运行pip3出现`UnicodeDecodeError: 'ascii' codec can't decode byte 0xe6 in position 46: ordinal not in range(128)`:
+   
+   ```
+   echo -e '#lang\nexport LANG=en_US.UTF-8\nexport LANGUAGE=en_US:en\nexport LC_ALL=en_US.UTF-8'>>~/.bashrc && source ~/.bashrc
+   ```
