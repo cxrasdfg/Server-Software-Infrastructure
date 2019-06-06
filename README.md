@@ -37,7 +37,7 @@ ___
    apt install fonts* -y
    ```
 6. 在31上的服务器断电重启后出现掉显卡驱动的问题(宿主机):
-   1. 先执行[`add_workspace.sh`](./chapters/scripts/main/add_workspace.sh)脚本挂载硬盘到用户目录:
+   1. ~~先执行[`add_workspace.sh`](./chapters/scripts/main/add_workspace.sh)脚本挂载硬盘到用户目录~~(挂载脚本已废除，请在创建容器的时候加入 `-v /media/hdd/D:/media/hdd/D -v /media/hdd/F:/media/hdd/F` 参数挂载硬盘到容器里以供访问):
       ```
       sudo ./add_workspace.sh
       ```
