@@ -1,11 +1,13 @@
 # 基础环境搭建
 ___
 - [目录]
-  - 一.[登录](#login )
-  - 二.[建立自己的容器](#Container)
-  - 三.[远程桌面](#RD)
+  - 一.[登录](#Login)
+  - 二.[virtualenv](#virtualenv)
+  - 三.[建立自己的容器](#Container)
+  - 四.[远程桌面](#RemoteDesktop)
+  - 五.[代码编辑与调试](#Code&Debug)
 
-# login
+# Login
 假设你已经申请到账号，账号名为:test，密码默认为:123，以ip地址为:192.168.7.183的服务器为例。
 
 - linux/mac用户:
@@ -18,20 +20,52 @@ ___
   [Anaconda](https://repo.anaconda.com/archive/Anaconda3-2018.12-Windows-x86_64.exe)使用上ssh命令。如下图:
   ![alt text](./ssh.gif)
 
-# container
-现在你应该已经进入了服务器的终端界面。接下来会介绍如何利用docker命令创建自己的容器(container)。
-## 2.1 docker简单介绍
-使用docker的目的是为了给同一台机器创建多个互不干扰的环境，可以理解为虚拟机。所有想要安装、使用的软件，请在自己创建的容器中安装、使用，请不要再在docker外执行，以免干扰到其他人。
+# virtualenv
+如果不需要独立的系统环境，只用python，使用virtualenv命令足够应付大多数python库的安装，直接跳过Container部分内容也可正常使用。virtualenv比docker轻，而且也可以复用，不用什么端口转发，与客户端通信也方便。当然Anaconda环境可作为第三种选择。
+## 2.1 创建virtualenv环境:
+创建基于python3.6的环境
+   ```
+   virtualenv -p `which python3.6` ~/workspace/my_python3_env
+   ```
+   ![alt text](./vir_env.jpg)
+如果想要其他python版本改下名字即可，例如将python 3.6改为python3.4可以创建基于python3.4的环境。
 
-## 2.2 创建一个容器
+## 2.2 激活环境
+   ```
+   source ~/workspace/my_python3_env/bin/activate
+   ```
+   激活环境后执行`python`即可进入virtualenv的python3.6。
+
+## 2.3 更改pip源
+  改为清华的源，也可以用163、阿里的。
+  
+   ```
+   echo -e '[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple\n[install]\ntrusted-host=mirrors.aliyun.com' > ~/.pip/pip.conf
+   ```
+   接下来就可以正常的使用`pip`命令安装所需要的库，例如`pip3 install torch torchcv`安装PyTorch。安装的库会安装在创建的virtualenv目录下，不会影响系统Python环境，也不需要root权限。重新登录到SSH后只需要再执行上一步的激活环境命令即可。
+
+## 2.4 退出环境
+   暂时不需要virtualenv环境下的Python可以用以下命令退出
+   ```
+   deactivate
+   ```
+
+
+# Container
+现在你应该已经进入了服务器的终端界面。接下来会介绍如何利用docker命令创建自己的容器(container)。(如果virtualenv已经满足使用，可以不用docker)
+
+## 3.1 docker简单介绍
+使用docker的目的是为了给同一台机器创建多个互不干扰的环境，可以简单当作虚拟机使用。所有想要安装、使用的软件，请在自己创建的容器中安装、使用，请不要再在docker外执行，以免干扰到其他人。
+
+## 3.2 创建一个容器
 为了便于理解，你可以把创建一个容器看作创建了一个虚拟机。创建的步骤主要为：
-### 2.2.1 获取最基础的镜像包
+### 3.2.1 获取最基础的镜像包
 这里以镜像名为ubuntu:19.04的镜像为例:
 ```
 sudo docker pull ubuntu:19.04
 ```
 ![alt text](./ubuntu19.04.gif)
-### 2.2.2 创建一个新的容器
+### 3.2.2 创建一个新的容器
 - 创建容器并且将显卡设备挂入到新建的容器中:
     ```
     sudo docker run -i -t  -p 外部端口:内部端口 --shm-size 4gb --name="你的名字" --device /dev/nvidiactl --device /dev/nvidia-uvm --device /dev/nvidia0 --device /dev/nvidia1 -v /home/你的目录:/root/workspace 镜像名 /bin/bash
@@ -67,7 +101,7 @@ Note:
     ```
     注意镜像(image)与容器(container)不是一个东西， 前面我们用docker pull的ubuntu:19.04，这个东西是镜像，用docker run创建的名为test的，是容器名。如果有基于某镜像的容器，必须先将该容器删除，否则该镜像是无法被删除的。
 
-### 2.2.3 安装nvidia显卡驱动
+### 3.2.3 安装nvidia显卡驱动
 对于使用官方纯净镜像的玩家，刚进入容器的时候是几乎什么都没有的，所以大部分东西都要手动安装。这里建议先安装显卡驱动，注意容器的显卡驱动要与宿主机的驱动一致，否则没法使用。可以在宿主机(容器外部)使用```nvidia-smi | grep Driver```命令查看驱动版本:
 ![Image text](./driver.gif)
 可以看到此时宿主机的驱动版本为384.111。
@@ -125,7 +159,7 @@ n卡官方的linux驱动地址[下载](https://www.nvidia.com/object/unix.html)�
   ```
   service gdm stop
   ```
-### 2.2.4 安装cuda与cudnn
+### 3.2.4 安装cuda与cudnn
 [cuda](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal)与[cudnn](https://developer.nvidia.com/rdp/cudnn-download)均可从nvidia的官网进行下载，cudnn需要注册并且同意相关条款才可使用。理论上不用cudnn也行，用了cudnn某些运算会加快。
 - 执行安装包
   ```
@@ -158,31 +192,31 @@ n卡官方的linux驱动地址[下载](https://www.nvidia.com/object/unix.html)�
   ![alt text](./source.gif)
 
  
-# RD
+# RemoteDesktop
 接下来将在容器中使用vnc进行远程桌面的搭建。
 
-3.1 安装xfce4桌面:
+4.1 安装xfce4桌面:
    ```
    apt install xfce4* -y
    ```
    中间会让你选择地理位置、键盘等，看着选就行。选择default display manager的时候，选择lightdm。过程太长就不截图了。
 
-3.2 安装vncserver:
+4.2 安装vncserver:
    ```
    apt install vnc4server -y
    ```
-3.3 运行vncserver:
+4.3 运行vncserver:
    ```
    vncserver -geometry 1920x1080 :1
    ```
    会要求创建vnc的密码，供登录使用
 
-3.4 关闭vncserver:
+4.4 关闭vncserver:
    ```
    vncserver -kill :1
    ```
 
-3.5 修改`~/.vnc/xstartup`:
+4.5 修改`~/.vnc/xstartup`:
    
    ```
    vim ~/.vnc/xstartup
@@ -206,8 +240,40 @@ n卡官方的linux驱动地址[下载](https://www.nvidia.com/object/unix.html)�
    ``` 
    然后重新启动`vncserver`
 
-3.6 下载vnc客户端(vnc viewer):
+4.6 下载vnc客户端(vnc viewer):
 - [Linux](https://www.realvnc.com/en/connect/download/viewer/linux/)版本的客户端和[Windows](https://www.realvnc.com/en/connect/download/viewer/windows/)版的客户端可以分别在官网下载。
 - 打开VNCViewer, 输入ip+外部端口号，这里为:`192.168.7.183:9200`，连接上后输入之前创建的vncserver密码，即可进入xfce4桌面:
 ![Img Text](./vnc.jpg)
 其它的桌面如gnome-destop， deepin-desktop等，也是可以进行配置使用的，感兴趣的可以自己尝试。
+
+# Code&Debug
+在服务器上进行代码编辑调试工作，包括并不限于以下几种选择
+- 1. SSH+VIM: 
+  
+      推荐指数：★★☆☆☆\
+      熟练了就会很快乐。对新手不友好。。。搞CV的可能就会很难受。
+
+- 2. VNC远程桌面环境：
+
+      推荐指数：★★★★☆\
+      图形界面基本上满足所有的需求，可以直接执行各种IDE，例如CLion，VSCode，PyCharm，IDEA，Eclipse等，方便开发调试。有时候会很卡，且占用更多的资源。。。
+
+- 3. Jupyter Notebook：
+
+      推荐指数：★★★★☆\
+      所见即所得，还能顺便写写公式。遇到交互式界面就傻了，C/C++支持即麻烦又不好用。。。使用参考这里[这里](../lib/lib.md#jupyter)
+
+- 4. VSCode:
+  
+      推荐指数：★★★☆☆\
+      最新的Remote插件支持从本地直接连接到服务器上的VSCode。由于SSH会话不是唯一的，导致重连接后找不到正在炼丹的进程。。。
+
+- 5. CodeServer:
+  
+      推荐指数：★★☆☆☆\
+      可在浏览器中使用VSCode。有一些显示上的bug，字体也不舒服，插件源是CodeServer自己维护的，所以下载非常的慢。。。
+  
+- 6. 自己买个工作站:
+  
+      推荐指数：★★★★★\
+      可以随便折腾，会更加快乐。实力与地位的象征。
